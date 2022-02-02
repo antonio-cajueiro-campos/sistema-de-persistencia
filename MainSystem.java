@@ -5,7 +5,7 @@ public class MainSystem {
 	public static void main(String[] args) throws IOException {
 		ScreenManager.setTitle("Sistema de Persistência de Dados - Antonio Carlos");
 		initScreen();
-    }
+	}
 	
 	public static void initScreen() {
 		int retorno = ScreenManager.createScreenContext(0, 2);
