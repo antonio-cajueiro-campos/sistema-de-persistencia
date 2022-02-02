@@ -76,7 +76,7 @@ public class ScreenManager {
 	public static void showScreen(int indice, boolean isError) {
 		cleanScreen();
 
-		ArrayList<ArrayList<String>> telas = new ArrayList<>(Arrays.asList(Screen.initial, Screen.leave, Screen.register));
+		ArrayList<ArrayList<String>> telas = new ArrayList<>(Arrays.asList(Screen.INITIAL, Screen.LEAVE, Screen.REGISTER));
 
 		telas.get(indice).stream().forEach(System.out::println);
 		if (isError) System.out.println("\r\tDigite uma reposta válida");
