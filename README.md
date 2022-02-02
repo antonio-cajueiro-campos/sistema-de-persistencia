@@ -1,2 +1,2 @@
 # sistema-de-persistencia
-Sistema de persistências de dados em java. :)
+Sistema de persistência de dados em java. :)
