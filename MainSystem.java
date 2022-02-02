@@ -1,41 +1,71 @@
 import java.io.IOException;
 
-public class MainSystem {
-	
+public class MainSystem {	
 	public static void main(String[] args) throws IOException {
 		ScreenManager.setTitle("Sistema de Persistência de Dados - Antonio Carlos");
+		ScreenManager.playSound("hello");
 		initScreen();
 	}
 	
 	public static void initScreen() {
-		int retorno = ScreenManager.createScreenContext(0, 2);
+		String input = ScreenManager.createScreenContext(0);
 
-		if (retorno == 2)
+		if (input.equals("2"))
 		leaveScreen();
 		else
 		loginScreen();
 	}
 	
 	public static void leaveScreen() {
-		int retorno = ScreenManager.createScreenContext(1, 3);
+		String input = ScreenManager.createScreenContext(1);
 
-		if (retorno == 1) {
+		if (input.equals("1")) {
 			registerScreen();
-		} else if (retorno == 2) {
+		} else if (input.equals("2")) {
 			initScreen();
-		} else	System.exit(0);
-
-	}
-
-	public static void loginScreen() {
-
+		} else {
+			try {
+				ScreenManager.playSound("bye"); Thread.sleep(1000); System.exit(0);
+			} catch (InterruptedException e) {}
+		}
 	}
 
 	public static void registerScreen() {
+		String input = ScreenManager.createScreenContext(2);
 
+		if (input.equals("1")) {
+			initScreen();
+		} else {
+			//salvar username			
+		}
 	}
 
-	public static void profileScreen(String username) {
+	public static void loginScreen() {
+		String input = ScreenManager.createScreenContext(3);
 
+		if (input.equals("1")) {
+			initScreen();
+		} else {
+			//salvar username			
+		}
+	}
+
+
+	public static void profileScreen(String username) {
+		String input = ScreenManager.createScreenContext(4);
+
+		if (input.equals("1")) {
+			profileInfosScreen(username);
+		} else {
+			initScreen();
+		}
+	}
+
+	public static void profileInfosScreen(String username) {
+		String input = ScreenManager.createScreenContext(4);
+
+		if (input.equals("1")) {
+			profileScreen(username);
+		}
 	}	
 }

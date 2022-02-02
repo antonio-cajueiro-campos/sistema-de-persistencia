@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import javax.sound.sampled.AudioInputStream;
@@ -11,30 +10,36 @@ import javax.sound.sampled.FloatControl;
 
 public class ScreenManager {
 
-	public static final String os = System.getProperty("os.name"); 
-	private static final Scanner scan = new Scanner(System.in);
+	public static final String os = System.getProperty("os.name");
+	public static final Scanner scan = new Scanner(System.in);
 	
-	public static int createScreenContext(int screenId, int optionsNumber) {
-		int retorno = 0;
+	public static String createScreenContext(int screenId) {
 		boolean isError = false;
-
+		String[] retorno = {"true", null};
+		
 		do {
-			showScreen(screenId, isError);
-			try {
-				retorno = scan.nextInt();
-				if (retorno < 1 || retorno > optionsNumber) throw new InputMismatchException();
-			} catch (InputMismatchException e) {
-				playSound("error");
-				isError = true;
-				scan.nextLine();
-			}
-		} while (retorno < 1 || retorno > optionsNumber);
-		playSound("ok");
+			ArrayList<String> validOptions = showScreen(screenId, isError);
+			retorno = inputReader(validOptions);
+			
+		} while (Boolean.parseBoolean(retorno[0]));
+
+		return retorno[1];
+	}
+	
+	public static String[] inputReader(ArrayList<String> validOptions) {
+		//Scanner scan = new Scanner(System.in);
+		String input = scan.next();
+
+		Boolean isError = validOptions.stream().noneMatch(op -> op.equals(input));
+			
+		if (isError) playSound("error"); else playSound("ok");
+
+		String[] retorno = {isError.toString(), input};
 		return retorno;
 	}
 
 	public final static void setTitle(String titleName) {
-		if (os.contains("Windows 10")) {
+		if (os.contains("Windows")) {
 			try {
 				new ProcessBuilder("cmd", "/c", "title "+titleName).inheritIO().start().waitFor();
 			}
@@ -45,18 +50,17 @@ public class ScreenManager {
 
 	public final static void cleanScreen() {
 		try {
-			if (os.contains("Windows 10")) {
+			if (os.contains("Windows")) {
 				try {
 					new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
 				} catch (InterruptedException e) {}
-			}
-			else
-				Runtime.getRuntime().exec("clear");
+			} else Runtime.getRuntime().exec("clear");
+
 		} catch (IOException e) {}
 		System.out.println("\r\n");
 	}
 
-	public static synchronized void playSound(String soundName) {
+	public static final synchronized void playSound(String soundName) {
 		new Thread(new Runnable() {
 		 	public void run() {
 				try {
@@ -73,13 +77,14 @@ public class ScreenManager {
 		}).start();
 	}
 
-	public static void showScreen(int indice, boolean isError) {
+	public static final ArrayList<String> showScreen(int indice, boolean isError) {
 		cleanScreen();
 
-		ArrayList<ArrayList<String>> telas = new ArrayList<>(Arrays.asList(Screen.INITIAL, Screen.LEAVE, Screen.REGISTER));
+		ArrayList<ArrayList<String>> telas = new ArrayList<>(Arrays.asList(Screen.INITIAL, Screen.LEAVE, Screen.REGISTER, Screen.LOGIN, Screen.PROFILE));
 
 		telas.get(indice).stream().forEach(System.out::println);
 		if (isError) System.out.println("\r\tDigite uma reposta válida");
-		System.out.print("\tResposta: ");
+		System.out.print("\t>: ");
+		return Screen.VALID_OPTIONS.get(indice);
 	}
 }
