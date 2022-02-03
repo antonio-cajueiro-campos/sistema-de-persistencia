@@ -27,7 +27,6 @@ public class ScreenManager {
 	}
 	
 	public static String[] inputReader(ArrayList<String> validOptions) {
-		//Scanner scan = new Scanner(System.in);
 		String input = scan.next();
 
 		Boolean isError = validOptions.stream().noneMatch(op -> op.equals(input));
@@ -65,11 +64,13 @@ public class ScreenManager {
 		 	public void run() {
 				try {
 					Clip clip = AudioSystem.getClip();
-					AudioInputStream inputStream = AudioSystem.getAudioInputStream(MainSystem.class.getResourceAsStream("/sounds/"+soundName+".wav"));
+					AudioInputStream inputStream = AudioSystem.getAudioInputStream(MainSystem.class.getResourceAsStream("sounds/"+soundName+".wav"));
 					clip.open(inputStream);
 
 					FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-					volumeControl.setValue(-28f);
+					float volume = -28f;
+					if (soundName == "hello" || soundName == "bye") volume = -10f;
+					volumeControl.setValue(volume);
 
 					clip.start();
 				} catch (Exception e) {}

@@ -46,7 +46,7 @@ public class MainSystem {
 		if (input.equals("1")) {
 			initScreen();
 		} else {
-			//salvar username			
+			//ler username			
 		}
 	}
 
